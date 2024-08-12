@@ -3,7 +3,7 @@ int searchInsert(int* nums, int numsSize, int target) {
     if (nums[numsSize - 1] < target) return numsSize;
 
     int lidx = 0, ridx = numsSize - 1;
-    int midx = (lidx + ridx) /2;
+    int midx = (lidx + ridx) >> 1;
 
     while ((ridx - lidx) > 1)
     {
@@ -19,7 +19,7 @@ int searchInsert(int* nums, int numsSize, int target) {
         {
             return midx;
         }
-        midx = (lidx + ridx) / 2;
+        midx = (lidx + ridx) >> 1;
     }
     return lidx + 1;
 }
