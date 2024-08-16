@@ -1,4 +1,5 @@
 int climbStairs(int n) {
+    if (n == 1) return 1;
     int *stairs = malloc(n * sizeof(int));
     *stairs = 1;
     *(stairs+1) = 2;
