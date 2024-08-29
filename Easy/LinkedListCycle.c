@@ -6,29 +6,20 @@
  * };
  */
 bool hasCycle(struct ListNode *head) {
-    if (head == NULL) return false;
+    if (head == NULL || head->next == NULL) return false;
     
-    struct ListNode** listNode = malloc(10000 * sizeof(struct ListNode*));
+    struct ListNode* oneStep = head;
+    struct ListNode* twoStep = head->next;
 
-    for (int i = 0; i < 10000; i++)
+    while (1)
     {
-        listNode[i] = head;
-        if (head->next != NULL)
-        {
-            head = head->next;
-        }
-        else
-        {
-            return false;
-        }
-        for (int j = 0; j < i; j++)
-        {
-            if (listNode[j] == listNode[i])
-            {
-                return true;
-            }
-        }
+        if (oneStep == twoStep) return true;
+        
+        if (twoStep->next == NULL) return false;
+        if (twoStep->next->next == NULL) return false;
+
+        oneStep = oneStep->next;
+        twoStep = twoStep->next->next;
     }
-    
     return false;
 }
