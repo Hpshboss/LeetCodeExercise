@@ -33,29 +33,30 @@ int robotSim(int* commands, int commandsSize, int** obstacles, int obstaclesSize
     {
         if (commands[i] == -1)
         {
-            direction -= 1;
+            direction = (direction - 1 + 4) % 4;
             continue;
         }
         if (commands[i] == -2)
         {
-            direction += 1;
+            direction = (direction + 1) % 4;
             continue;
         }
 
-        dest[0] = pos[0] + commands[i] * (direction % 2 == 0 ? 1 : 0);
-        dest[1] = pos[1] + commands[i] * (direction % 2 == 1 ? 1 : 0);
+        dest[0] = pos[0] + commands[i] * (direction % 2 == 0 ? 1 - direction : 0);
+        dest[1] = pos[1] + commands[i] * (direction % 2 == 1 ? 2 - direction : 0);
 
         for (int j = 0; j < obstaclesSize; j++)
         {
             if (isObstacle(pos, dest, obstacles[j]))
             {
-                dest[0] = obstacles[j][0] - (direction % 2 == 0 ? 1 : 0);
-                dest[1] = obstacles[j][1] - (direction % 2 == 1 ? 1 : 0);
+                dest[0] = obstacles[j][0] - (direction % 2 == 0 ? 1 - direction : 0);
+                dest[1] = obstacles[j][1] - (direction % 2 == 1 ? 2 - direction : 0);
                 break;
             }
         }
         pos[0] = dest[0];
         pos[1] = dest[1];
+        
         ret = max(ret, powInt(pos[0], 2) + powInt(pos[1], 2));
     }
 
