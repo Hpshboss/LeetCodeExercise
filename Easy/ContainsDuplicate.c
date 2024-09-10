@@ -1,43 +1,52 @@
-#define SWAP(x, y, T) do { T SWAP = x; x = y; y = SWAP; } while (0)
-
-int quickSort(int* nums, int left, int right) {
-    // printf("left: %d; right: %d\n", left, right);
-    if (right - left < 1) return 0;
-    int idxi = left, idxj = left-1;
-    int pivot = nums[right];
-    // printf("check\n");
-    for (idxi = left; idxi <= right; idxi++)
-    {
-        // printf("For: idxi: %d; idxj: %d\n", idxi, idxj);
-        if (nums[idxi] > pivot) continue;
-        
-        if (nums[idxi] <= pivot)
-        {
-            idxj++;
-            // printf("Forif: idxi: %d; idxj: %d\n", idxi, idxj);
-            if (nums[idxi] == nums[idxj]) continue;
-            if (nums[idxi] < nums[idxj]) SWAP(nums[idxi], nums[idxj], int);
-        }
-    }
-
-    if (pivot > nums[idxj])
-    {
-        SWAP(nums[idxj], pivot, int);
-    }
-    // printf("[%d, %d, %d, %d]\n", nums[0], nums[1], nums[2], nums[3]);
-
-    quickSort(nums, left, idxj-1);
-    quickSort(nums, idxj+1, right);
-
-    return 0;
-}
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ **/
 
 bool containsDuplicate(int* nums, int numsSize) {
-    quickSort(nums, 0, numsSize - 1);
+    struct TreeNode* head = malloc(sizeof(struct TreeNode));
+    struct TreeNode* sp = head;
 
+    head->val = nums[0]; head->left = NULL; head->right = NULL;
     for (int i = 1; i < numsSize; i++)
     {
-        if (nums[i] == nums[i-1]) return true;
+        head = sp;
+        while (head != NULL)
+        {
+            if (head->val == nums[i]) return true;
+            if (head->val > nums[i])
+            {
+                if (head->left == NULL)
+                {
+                    struct TreeNode* node = malloc(sizeof(struct TreeNode));
+                    node->val = nums[i]; node->left = NULL; node->right = NULL;
+                    head->left = node;
+                    break;
+                }
+                else
+                {
+                    head = head->left;
+                }
+            }
+            else 
+            {
+                if (head->right == NULL)
+                {
+                    struct TreeNode* node = malloc(sizeof(struct TreeNode));
+                    node->val = nums[i]; node->left = NULL; node->right = NULL;
+                    head->right = node;
+                    break;
+                }
+                else
+                {
+                    head = head->right;
+                }
+            }
+        }
     }
     return false;
 }
