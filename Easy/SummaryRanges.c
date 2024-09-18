@@ -44,14 +44,32 @@ char** summaryRanges(int* nums, int numsSize, int* returnSize) {
     char** ret = malloc(20 * sizeof(char*));
     *returnSize = 0;
     if (numsSize == 0) return ret;
+    if (numsSize == 1)
+    {
+        (*returnSize)++;
+        char* single = malloc(15 * sizeof(char));
+        intToChars(single, (long)nums[i]);
+        ret[0] = malloc((strlen(single) + 1) * sizeof(char));
+        for (int p = 0; p < strlen(single) + 1; p++) ret[0][p] = single[p];
+
+        free(single);
+        return ret;
+    }
 
     j++;
-    while (j < numsSize)
+    bool islast = false;
+    while (islast == false)
     {
-        // printf("i, j = %d, %d\n", i, j);
-        if ((long)nums[j] - (long)nums[j-1] > (long)1)
+        if (j == numsSize)
+        {
+            j--;
+            islast = true;
+        }
+        printf("i, j = %d, %d\n", i, j);
+        if ((long)nums[j] - (long)nums[j-1] > (long)1 || islast == true)
         {
             (*returnSize)++;
+            if (islast == true) j++;
             if (j - i == 1)
             {
                 char* single = malloc(15 * sizeof(char));
@@ -85,39 +103,7 @@ char** summaryRanges(int* nums, int numsSize, int* returnSize) {
         }
         j++;
     }
-    j--;
-    // printf("i, j = %d, %d\n", i, j);
-    (*returnSize)++;
-    if (j == i)
-    {
-        char* single = malloc(15 * sizeof(char));
-        intToChars(single, nums[i]);
-        ret[idx] = malloc((strlen(single) + 1) * sizeof(char));
-        for (int p = 0; p < strlen(single) + 1; p++) ret[idx][p] = single[p];
-
-        free(single);
-        idx++;
-        i = j;
-    }
-    else
-    {
-        char* from = malloc(15 * sizeof(char));
-        char* to = malloc(15 * sizeof(char));
-
-        intToChars(from, nums[i]);
-        intToChars(to, nums[j]);
-
-        ret[idx] = malloc((strlen(from) + strlen(to) + 3) * sizeof(char));
-        int p = 0;
-        for (; p < strlen(from); p++) ret[idx][p] = from[p];
-        for (; p < strlen(from) + 2; p++) ret[idx][p] = arrow[p-strlen(from)];
-        for (; p < strlen(from) + strlen(to) + 3; p++) ret[idx][p] = to[p-strlen(from)-2];
-
-        free(from);
-        free(to);
-        idx++;
-        i = j;
-    }
+    
     printf("size: %d\n", *returnSize);
     return ret;
 }
