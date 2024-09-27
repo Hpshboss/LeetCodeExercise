@@ -6,27 +6,38 @@
  * };
  */
 bool isPalindrome(struct ListNode* head) {
-    struct ListNode* node = head;
-    int len = 0;
+    struct ListNode* snode = head;
+    struct ListNode* fnode = head;
+    struct ListNode* prev = NULL;
+    struct ListNode* curr = NULL;
+    struct ListNode* next = NULL;
+    struct ListNode* startnode = NULL;
+    struct ListNode* endnode = NULL;
 
-    while(node != NULL)
+    while (fnode != NULL)
     {
-        len++;
-        node = node->next;
+        if (fnode->next == NULL) break;
+        snode = snode->next;
+        fnode = fnode->next->next;
     }
 
-    int* vals = malloc(len * sizeof(int));
-
-    node = head;
-    for (int i = 0; i < len; i++)
+    curr = snode;
+    while (curr != NULL)
     {
-        vals[i] = node->val;
-        node = node->next;
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
     }
 
-    for (int i = 0; i < len >> 1; i++)
+    startnode = head;
+    endnode = prev;
+    while(startnode != NULL && endnode != NULL)
     {
-        if (vals[i] != vals[len-i-1]) return false;
+        if (startnode->val != endnode->val) return false;
+        startnode = startnode->next;
+        endnode = endnode->next;
     }
+
     return true;
 }
