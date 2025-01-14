@@ -81,5 +81,7 @@ int equalPairs(int** grid, int gridSize, int* gridColSize) {
         rcnt = 1; ccnt = 1;
     }
 
+    free(rmaps);
+    free(cmaps);
     return ret;
 }
