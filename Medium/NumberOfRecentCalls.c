@@ -1,4 +1,4 @@
-#define BUFSIZE 3002
+#define BUFSIZE 3005
 #define ISINRANGE(t, r) (t <= r && t >= r - 3000)
 
 typedef struct {
@@ -19,8 +19,10 @@ RecentCounter* recentCounterCreate() {
 }
 
 int recentCounterPing(RecentCounter* rc, int t) {
-    int ret = 0;
-
+    static int ret = 0;
+    if (rc->head == rc->tail)
+        ret = 0;
+    
     rc->times[rc->tail] = t;
 
     if ((rc->head - rc->tail + rc->size) % rc->size == 1)
@@ -28,11 +30,15 @@ int recentCounterPing(RecentCounter* rc, int t) {
 
     rc->tail = (rc->tail + 1) % rc->size;
     
+    ret++;
     for (int i = rc->head; (rc->tail - i + rc->size) % rc->size >= 1; i = (i + 1) % rc->size)
     {
-        ret += (ISINRANGE(rc->times[i], t)) ? 1 : 0;
+        if (!ISINRANGE(rc->times[i], t))
+        {
+            ret--;
+            rc->head = (i + 1) % rc->size;
+        }
     }
-
     return ret;
 }
 
