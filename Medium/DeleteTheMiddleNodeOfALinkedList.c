@@ -11,6 +11,9 @@ struct ListNode* deleteMiddle(struct ListNode* head) {
     struct ListNode* retsp = ret;
     struct ListNode* node = head;
 
+    if (head == NULL || head->next == NULL)
+        return NULL;
+
     while (true)
     {
         size++;
@@ -19,20 +22,17 @@ struct ListNode* deleteMiddle(struct ListNode* head) {
         else
             break;
     }
-
+    
     node = head;
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size - 1; i++)
     {
-        printf("jjjj\n");
-        if (i == (size >> 1))
+        if (i == (size >> 1) - 1)
+        {
+            node->next = node->next->next;
             continue;
-        
-        ret->val = node->val;
-        ret->next = malloc(sizeof(struct ListNode));
-        ret = ret->next;
+        }
         node = node->next;
     }
-    ret = retsp;
 
-    return ret;
+    return head;
 }
