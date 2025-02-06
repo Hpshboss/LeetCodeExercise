@@ -6,26 +6,34 @@
  * };
  */
 struct ListNode* reverseList(struct ListNode* head) {
-    if (head == NULL) return NULL;
-    
-    struct ListNode* ret = malloc(sizeof(struct ListNode));
-    struct ListNode* sp = ret;
-    struct ListNode** arr = malloc(5000*sizeof(struct ListNode*));
+    struct ListNode* ret = calloc(1, sizeof(struct ListNode));
+    struct ListNode* retsp = ret;
+    struct ListNode* node = head;
+    int* vals = malloc(5000 * sizeof(int));
+    int idx = 0;
 
-    int i = 0;
-    for (i = 0; head != NULL; i++)
+    if (head == NULL)
     {
-        arr[i] = head;
-        head = head->next;
+        free(vals);
+        return NULL;
     }
-    
-    for (i--;i >= 0; i--)
+
+    while (node != NULL)
     {
-        ret->val = arr[i]->val;
-        ret->next = i != 0 ? arr[i-1] : NULL;
+        vals[idx++] = node->val;
+        node = node->next;
+    }
+
+    while (idx > 1)
+    {
+        ret->val = vals[--idx];
+        ret->next = calloc(1, sizeof(struct ListNode));
         ret = ret->next;
     }
-    
-    free(arr);
-    return sp;
+    ret->val = vals[0];
+
+    ret = retsp;
+
+    free(vals);
+    return ret;
 }
