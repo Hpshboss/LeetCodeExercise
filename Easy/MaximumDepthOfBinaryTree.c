@@ -7,13 +7,21 @@
  * };
  */
 int maxDepth(struct TreeNode* root) {
-    if (root == NULL) return 0;
-    int ret = 1;
-    if (root->right != NULL | root->left != NULL)
-    {
-        int ldepth = maxDepth(root->left);
-        int rdepth = maxDepth(root->right);
-        ret += (ldepth > rdepth ? ldepth : rdepth);
-    }
+    int ret = 0;
+    int lcnt = 0;
+    int rcnt = 0;
+
+    if (root == NULL)
+        return 0;
+    
+    if  (root->left != NULL)
+        lcnt = maxDepth(root->left);
+    
+    if (root->right != NULL)
+        rcnt = maxDepth(root->right);
+    
+    ret = lcnt > rcnt ? lcnt : rcnt;
+    ret++;
+
     return ret;
 }
